@@ -1,2 +1,2 @@
 # Multithreading and vectorizing exercise
-Exercise to implement multithreading and vectorized calculation to a simple C program.
+Exercise to implement multithreading and vectorized calculation in a simple C program.
