@@ -6,18 +6,18 @@
 
 double rnorm (float *U, int n){
     int i;
-    double somme = 0;
+    double res = 0;
 
     for (i=0; i<n; i++){
-        somme += sqrt(U[i]);
+        res += sqrt(U[i]);
     }
 
-    return somme;
+    return res;
 }
 
 int main(){
     float U[N];
-    double somme;
+    double res;
     int i;
 
     printf("Root-norm of [");
@@ -33,8 +33,8 @@ int main(){
         }
     }
 
-    somme = rnorm(U,N);
-    printf("is %.2f", somme);
+    res = rnorm(U,N);
+    printf("is %.2f", res);
 
     return 0;
 }
