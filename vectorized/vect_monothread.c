@@ -18,13 +18,11 @@ double now(){
 }
 
 float u[N] __attribute__((aligned(32)));            //align to 32 bytes to use 256 bits vectors
-double ud[N] __attribute__((aligned(32)));          //second list to compare double precision
 
 void init(){
     unsigned int i;
     for( i = 0; i < N; i++ ){
         u[i] = (float)rand () / RAND_MAX / N;
-        ud[i] = (double)u[i];
     }
 }
 
@@ -52,14 +50,14 @@ double vect_rnorm(float *U, int n){
     return res;
 }
 
-double vect_rnorm_double(double *U, int n){
+double vect_rnorm_double(float *U, int n){
     int i;
     double res = 0;
     double r256[4] __attribute__((aligned(32))) = {};
-    __m256d *mm_u = (__m256d *)U;
+    __m128 *mm_u = (__m128 *)U;
     __m256d *mm_r = (__m256d *)r256;
     for( i = 0 ; i < n/4 ; i++ )
-        mm_r[0] = _mm256_add_pd(_mm256_sqrt_pd(mm_u[i]),mm_r[0]);
+        mm_r[0] = _mm256_add_pd(_mm256_sqrt_pd(_mm256_cvtps_pd(mm_u[i])),mm_r[0]);
     for( i = 0 ; i < 4 ; i++ )
         res += r256[i];
     return res;
@@ -98,7 +96,7 @@ int main(){
     t = now()-t;
     printf("Square-root norm (256 bits) : %.10f\n in %fs\n", res, t);
     t = now();
-    res = vect_rnorm_double(ud,N);
+    res = vect_rnorm_double(u,N);
     t = now()-t;
     printf("Square-root norm (256b double) : %.10f\n in %fs", res, t);
     #endif
