@@ -1,3 +1,10 @@
+//
+//  main.c
+//  
+//
+//  Created by Bratusse on march 1st, 2022.
+//
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -33,7 +40,6 @@ double res = 0;
 
 pthread_mutex_t res_mutex = PTHREAD_MUTEX_INITIALIZER;
 struct thread_data thread_data_array[NB_THREADS];
-unsigned int thread_i;
 pthread_t thread_ptr[NB_THREADS];
 
 void init(){
@@ -106,14 +112,13 @@ double rnormPar(float *U, int n, int nb_threads, bool mode){
     res = 0;
 
     for( i=0 ; i<nb_threads ; i++ ){
-        thread_i = i;
 
-        thread_data_array[thread_i].U = U;
-        thread_data_array[thread_i].mode = mode;
-        thread_data_array[thread_i].a = i*(n/nb_threads);
-        thread_data_array[thread_i].b = (i+1)*(n/nb_threads);
+        thread_data_array[i].U = U;
+        thread_data_array[i].mode = mode;
+        thread_data_array[i].a = i*(n/nb_threads);
+        thread_data_array[i].b = (i+1)*(n/nb_threads);
         
-        pthread_create(&thread_ptr[thread_i], NULL, thread_function, (void *) &thread_data_array[thread_i]);
+        pthread_create(&thread_ptr[i], NULL, thread_function, (void *) &thread_data_array[i]);
     }
 
     for( i=0 ; i<nb_threads ; i++ ){
